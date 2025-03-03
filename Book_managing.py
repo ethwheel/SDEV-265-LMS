@@ -21,7 +21,8 @@ def delete_book(isbn):
     conn = sqlite3.connect("library.db")
     cursor = conn.cursor()
     
-    cursor.execute("DELETE FROM books WHERE isbn = ?", (isbn))
+    # Fixed tuple formatting by adding a comma: (isbn,) 
+    cursor.execute("DELETE FROM books WHERE isbn = ?", (isbn,))
     #checking if we deleted something
     affected_rows = cursor.rowcount
 
