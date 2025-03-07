@@ -1,4 +1,5 @@
 import sqlite3
+from search import search_book
 #add a book to the database
 def add_book(title, author, isbn):
     conn = sqlite3.connect("library.db")
@@ -15,21 +16,71 @@ def add_book(title, author, isbn):
     
     conn.close()
 
-#delete a book from the database
-#Im doing ISBN because im not sure how I would delete with the title
-def delete_book(isbn):
+#updated delete to use search book and confirmations
+def delete_book(query, field="title"):
+    book_id = search_book(query, field)
+    if not book_id:
+        print("No book found to delete.")
+        return
+    
+    confirmation = input(f"Are you sure you want to delete book ID {book_id}? (yes/no): ").strip().lower()
+    if confirmation != "yes":
+        print("Deletion canceled.")
+        return
+    
     conn = sqlite3.connect("library.db")
     cursor = conn.cursor()
-    
-    # Fixed tuple formatting by adding a comma: (isbn,) 
-    cursor.execute("DELETE FROM books WHERE isbn = ?", (isbn,))
-    #checking if we deleted something
+    cursor.execute("DELETE FROM books WHERE id = ?", (book_id,))
     affected_rows = cursor.rowcount
-
+    
     if affected_rows > 0:
         print("Book successfully deleted.")
     else:
         print("No book found.")
-
+    
     conn.commit()
     conn.close()
+
+#updating book details 
+def update_book(query, field="title"):
+    book_id = search_book(query, field)
+    if not book_id:
+        print("No book found to update.")
+        return
+    
+    confirmation = input(f"Are you sure you want to update book ID {book_id}? (yes/no): ").strip().lower()
+    if confirmation != "yes":
+        print("Update canceled.")
+        return
+    
+    title = input("Enter new title (leave blank to keep unchanged): ").strip()
+    author = input("Enter new author (leave blank to keep unchanged): ").strip()
+    isbn = input("Enter new ISBN (leave blank to keep unchanged): ").strip()
+    
+    conn = sqlite3.connect("library.db")
+    cursor = conn.cursor()
+    
+    updates = []
+    values = []
+    #no idea but it works
+    if title:
+        updates.append("title = ?")
+        values.append(title)
+    if author:
+        updates.append("author = ?")
+        values.append(author)
+    if isbn:
+        updates.append("isbn = ?")
+        values.append(isbn)
+    
+    if updates:
+        values.append(book_id)
+        query = f"UPDATE books SET {', '.join(updates)} WHERE id = ?"
+        cursor.execute(query, values)
+        conn.commit()
+        print("Book updated successfully.")
+    else:
+        print("No changes provided.")
+    
+    conn.close()
+

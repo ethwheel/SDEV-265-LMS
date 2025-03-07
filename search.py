@@ -1,3 +1,7 @@
+import sqlite3
+
+import sqlite3
+
 def search_book(query, field="title"):
     """
     Search for books in the database by a given field.
@@ -6,29 +10,33 @@ def search_book(query, field="title"):
     - query: The search term.
     - field: The database column to search (e.g., "title", "author", "isbn").
       Defaults to "title".
+    
+    Returns:
+    - The book ID of the first matching result, or None if no match is found.
     """
-    # Validate that the field is allowed to avoid SQL injection.
     allowed_fields = ["title", "author", "isbn"]
     if field not in allowed_fields:
         print(f"Invalid search field. Choose one of: {allowed_fields}")
-        return
+        return None
 
     conn = sqlite3.connect("library.db")
     cursor = conn.cursor()
 
-    # Construct the SQL query. Using string formatting for the column is safe here because we've validated 'field'.
     sql_query = f"SELECT id, title, author, isbn, available FROM books WHERE {field} LIKE ?"
-    # Use wildcards for a partial match.
     cursor.execute(sql_query, ('%' + query + '%',))
-    results = cursor.fetchall()
+    result = cursor.fetchone()
 
-    if results:
-        print("Search results:")
-        for row in results:
-            id, title, author, isbn, available = row
-            status = "Available" if available == 1 else "Checked Out"
-            print(f"ID: {id} | Title: {title} | Author: {author} | ISBN: {isbn} | Status: {status}")
+    if result:
+        book_id, title, author, isbn, available = result
+        status = "Available" if available == 1 else "Checked Out"
+        print(f"ID: {book_id} | Title: {title} | Author: {author} | ISBN: {isbn} | Status: {status}")
+        conn.close()
+        return book_id
     else:
         print("No books found matching your query.")
+        conn.close()
+        return None
 
-    conn.close()
+
+
+
