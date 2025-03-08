@@ -28,6 +28,7 @@ def home():
 @login_required
 def checkout_book(bookId):
 
+    # temporarily just show book selected for checkout -- remove once available property is updated correctly
     books = Book.query.filter(Book.id == bookId)
 
     # get book
