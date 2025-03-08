@@ -23,3 +23,15 @@ def home():
         
     print(books)
     return render_template("home.html", user=current_user, books=books)
+
+@views.route('/checkout/<bookId>', methods=['GET', 'POST'])
+@login_required
+def checkout_book(bookId):
+
+    books = Book.query.filter(Book.id == bookId)
+
+    # get book
+    # update 'available' property
+    # return updated list of books
+
+    return render_template("home.html", user=current_user, books=books)

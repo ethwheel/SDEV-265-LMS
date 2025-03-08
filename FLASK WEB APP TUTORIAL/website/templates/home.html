@@ -44,7 +44,7 @@
                 </td>
                 <td>
                     {% if book.available %}
-                        <form method="POST" action="{{ url_for('views.checkout_book', book_id=book.id) }}" style="display:inline;">
+                        <form method="POST" action="{{ url_for('views.checkout_book', bookId=book.id) }}" style="display:inline;">
                             <button type="submit" class="btn btn-sm btn-primary">Check Out</button>
                         </form>
                     {% else %}
