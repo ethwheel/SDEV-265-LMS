@@ -10,7 +10,7 @@ def add_book(title, author, isbn):
                        (title, author, isbn))
         conn.commit()
         print("Book added successfully!")
-        #each ISBN should(?) be unique, if 2 exist there is a problem(?)
+        
     except sqlite3.IntegrityError:
         print("Error: ISBN already exists.")
     

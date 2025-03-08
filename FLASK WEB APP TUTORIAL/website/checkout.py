@@ -1,5 +1,6 @@
 # Check in / Check out functions
- 
+import sqlite3
+
 def check_out_book(isbn):
     """
     Marks a book as checked out (sets available to 0) if it is currently available.
