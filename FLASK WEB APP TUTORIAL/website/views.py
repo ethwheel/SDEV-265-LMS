@@ -29,10 +29,15 @@ def home():
 def checkout_book(bookId):
 
     # temporarily just show book selected for checkout -- remove once available property is updated correctly
-    books = Book.query.filter(Book.id == bookId)
+    #books = Book.query.filter(Book.id == bookId)
 
     # get book
+    books = Book.query.get(bookId)
     # update 'available' property
+    
+    books.available = 0
+    
+    db.session.commit()
     # return updated list of books
-
+    books = Book.query.all()
     return render_template("home.html", user=current_user, books=books)
