@@ -8,7 +8,7 @@
             "name": "Python Debugger: Current File",
             "type": "debugpy",
             "request": "launch",
-            "program": "${file}",
+            "program": "C:\\Users\\natha\\SDEV-265-LMS\\FLASK WEB APP TUTORIAL\\main.py",
             "console": "integratedTerminal"
         }
     ]

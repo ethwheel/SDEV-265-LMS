@@ -41,3 +41,21 @@ def checkout_book(bookId):
     # return updated list of books
     books = Book.query.all()
     return render_template("home.html", user=current_user, books=books)
+
+@views.route('/checkin/<bookId>', methods=['GET', 'POST'])
+@login_required
+def checkin_book(bookId):
+
+    # temporarily just show book selected for checkout -- remove once available property is updated correctly
+    #books = Book.query.filter(Book.id == bookId)
+
+    # get book
+    books = Book.query.get(bookId)
+    # update 'available' property
+    
+    books.available = 1
+    
+    db.session.commit()
+    # return updated list of books
+    books = Book.query.all()
+    return render_template("home.html", user=current_user, books=books)

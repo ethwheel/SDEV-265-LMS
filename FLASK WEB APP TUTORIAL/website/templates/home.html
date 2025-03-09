@@ -3,7 +3,8 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<h1 align="center">Home</h1>
+<h1 align="center">Book Library</h1>
+<img src="/static/bookshelves.png" style="margin: 8px;" />
 
 <!-- Search Form -->
 <form method="GET" action="{{ url_for('views.home') }}" class="mb-4">
@@ -45,10 +46,12 @@
                 <td>
                     {% if book.available %}
                         <form method="POST" action="{{ url_for('views.checkout_book', bookId=book.id) }}" style="display:inline;">
-                            <button type="submit" class="btn btn-sm btn-primary">Check Out</button>
+                            <button type="submit" class="btn btn-sm btn-success">Check Out</button>
                         </form>
                     {% else %}
-                        <button class="btn btn-sm btn-secondary" disabled>Check Out</button>
+                    <form method="POST" action="{{ url_for('views.checkin_book', bookId=book.id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger">Return</button>
+                    </form>
                     {% endif %}
                 </td>
             </tr>
